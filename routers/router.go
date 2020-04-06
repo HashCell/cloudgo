@@ -15,7 +15,9 @@ func InitRouter() *gin.Engine {
 	engine := gin.New()
 	engine.Use(gin.Logger())
 	engine.Use(gin.Recovery())
-	gin.SetMode(setting.RunMode)
+	gin.SetMode(setting.RunMode)	// 设置开发debug模式
+
+	// 添加路由处理器
 	engine.GET("/test", testHandler)
 
 	return engine
