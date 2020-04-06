@@ -16,6 +16,7 @@ var (
 	JwtSecret string
 )
 
+// 加载包时就执行
 func init()  {
 	var err error
 	// 获取ini.File对象

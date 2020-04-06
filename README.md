@@ -1,6 +1,8 @@
 # cloudgo
+
 go web demo
 
+```
 ├── conf        // 配置文件
 ├── middleware  // 中间件
 ├── models      // 数据库模型
@@ -13,3 +15,20 @@ go web demo
 ├── templates
 └── test
     └── test.go
+
+```
+### depended packages
+
+`go get -u github.com/go-ini/ini`
+
+### 编写工具包
+
+`go get -u github.com/Unknwon/com`
+
+#### 分页页码的获取方法
+
+### 编写models　init
+```
+gorm : go get -u github.com/jinzhu/gorm
+mysql driver: go get -u github.com/go-sql-driver/mysql
+```
