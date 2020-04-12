@@ -40,4 +40,6 @@ github.com/gin-gonic/gin
 github.com/jinzhu/gorm
 // mysql驱动
 github.com/go-sql-driver/mysql
+// beego 表单　validation
+go get -u github.com/astaxie/beego/validation
 ```

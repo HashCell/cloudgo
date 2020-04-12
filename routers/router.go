@@ -3,6 +3,7 @@ package routers
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/HashCell/golang/cloudgo/pkg/setting"
+	"github.com/HashCell/golang/cloudgo/routers/api/v1"
 )
 
 func testHandler(ctx *gin.Context)  {
@@ -12,13 +13,23 @@ func testHandler(ctx *gin.Context)  {
 }
 
 func InitRouter() *gin.Engine {
+
+	// gin.Engine 继承了　RouterGroup　
 	engine := gin.New()
 	engine.Use(gin.Logger())
 	engine.Use(gin.Recovery())
 	gin.SetMode(setting.RunMode)	// 设置开发debug模式
 
 	// 添加路由处理器
-	engine.GET("/test", testHandler)
+	//engine.GET("/test", testHandler)
+	//返回一个RouterGroup
+	apiV1 := engine.Group("/api/v1")
+	{
+		apiV1.GET("/tags", v1.GetTags)
+		apiV1.POST("/tags", v1.AddTag)
+		apiV1.PUT("/tags/:id", v1.EditTag)
+		apiV1.DELETE("/tags/:id", v1.DeleteTag)
+	}
 
 	return engine
 }

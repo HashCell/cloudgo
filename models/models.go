@@ -11,6 +11,7 @@ import (
 // ORM DB
 var db *gorm.DB
 
+// 作为其他model的父类
 type Model struct {
 	ID int `gorm:"primary_key" json:"id"`
 	CreatedOn int `json:"created_on"`
@@ -36,7 +37,7 @@ func init() {
 	host = sec.Key("HOST").String()
 	tablePrefix = sec.Key("TABLE_PREFIX").String()
 
-	db, err = gorm.Open(dbType, fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&paseTime=True&loc=Local",
+	db, err = gorm.Open(dbType, fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
 		user,
 		password,
 		host,
@@ -47,6 +48,7 @@ func init() {
 	}
 
 	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {
+		log.Println("[DEBUG]: " + tablePrefix+defaultTableName)
 		return tablePrefix + defaultTableName
 	}
 
