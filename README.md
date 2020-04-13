@@ -42,4 +42,6 @@ github.com/jinzhu/gorm
 github.com/go-sql-driver/mysql
 // beego 表单　validation
 go get -u github.com/astaxie/beego/validation
+// jwt doc https://godoc.org/github.com/dgrijalva/jwt-go
+go get -u github.com/dgrijalva/jwt-go
 ```

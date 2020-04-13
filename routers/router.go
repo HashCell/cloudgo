@@ -29,6 +29,19 @@ func InitRouter() *gin.Engine {
 		apiV1.POST("/tags", v1.AddTag)
 		apiV1.PUT("/tags/:id", v1.EditTag)
 		apiV1.DELETE("/tags/:id", v1.DeleteTag)
+
+		// add routers for article begin 2020.04.14
+		// get article list
+		apiV1.GET("articles", v1.GetArticles)
+		// get specified article
+		apiV1.GET("/articles/:id", v1.GetArticle)
+		// add article
+		apiV1.POST("/articles", v1.AddArticle)
+		// update article
+		apiV1.PUT("/articles/:id", v1.EditArticle)
+		// delete article
+		apiV1.DELETE("/articles/:id", v1.DeleteArticle)
+		// add routers for article end
 	}
 
 	return engine
