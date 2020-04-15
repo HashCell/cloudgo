@@ -3,7 +3,7 @@ package v1
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/Unknwon/com"
-	"github.com/HashCell/golang/cloudgo/pkg/status"
+	"github.com/HashCell/golang/cloudgo/pkg/e"
 	"github.com/HashCell/golang/cloudgo/models"
 	"github.com/HashCell/golang/cloudgo/pkg/util"
 	"github.com/HashCell/golang/cloudgo/pkg/setting"
@@ -33,15 +33,15 @@ func GetTags(ctx *gin.Context) {
 		maps["state"] = state
 	}
 
-	code := status.SUCCESS
+	code := e.SUCCESS
 
 	data["lists"] = models.GetTags(util.GetPage(ctx), setting.PageSize, maps)
 	data["total"] = models.GetTagTotal(maps)
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"code":code,
-		"msg":status.GetMsg(code),
-		"data":data,
+		"code": code,
+		"msg":  e.GetMsg(code),
+		"data": data,
 	})
 }
 
@@ -60,13 +60,13 @@ func AddTag(ctx *gin.Context) {
 	valid.MaxSize(name, 100, "name").Message("max length of name is 100")
 	valid.Range(state, 0, 1, "state").Message("state should be 0 - 1")
 
-	code := status.INVALID_PARAMS
+	code := e.INVALID_PARAMS
 	if !valid.HasErrors() {
 		if ! models.ExistTagName(name) {
-			code = status.SUCCESS
+			code = e.SUCCESS
 			models.AddTag(name, state, createdBy)
 		} else {
-			code = status.ERROR_NOT_EXIST_TAG
+			code = e.ERROR_NOT_EXIST_TAG
 		}
 	} else {
 		for _, err := range  valid.Errors {
@@ -75,9 +75,9 @@ func AddTag(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"code":code,
-		"msg":status.GetMsg(code),
-		"data":make(map[string]string),
+		"code": code,
+		"msg":  e.GetMsg(code),
+		"data": make(map[string]string),
 	})
 }
 
@@ -100,9 +100,9 @@ func EditTag(ctx *gin.Context) {
 	valid.MaxSize(modifiedBy, 100, "modified_by").Message("修改人最长为100字符")
 	valid.MaxSize(name, 100, "name").Message("名称最长为100字符")
 
-	code := status.INVALID_PARAMS
+	code := e.INVALID_PARAMS
 	if ! valid.HasErrors() {
-		code = status.SUCCESS
+		code = e.SUCCESS
 		if models.ExistTagByID(id) {
 			data := make(map[string]interface{})
 			data["modified_by"] = modifiedBy
@@ -115,7 +115,7 @@ func EditTag(ctx *gin.Context) {
 
 			models.EditTag(id, data)
 		} else {
-			code = status.ERROR_NOT_EXIST_TAG
+			code = e.ERROR_NOT_EXIST_TAG
 		}
 	} else {
 		for _, err := range valid.Errors {
@@ -125,7 +125,7 @@ func EditTag(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"code" : code,
-		"msg" : status.GetMsg(code),
+		"msg" :  e.GetMsg(code),
 		"data" : make(map[string]string),
 	})
 }
@@ -137,13 +137,13 @@ func DeleteTag(ctx *gin.Context) {
 	valid := validation.Validation{}
 	valid.Min(id, 1, "id").Message("ID必须大于0")
 
-	code := status.INVALID_PARAMS
+	code := e.INVALID_PARAMS
 	if ! valid.HasErrors() {
-		code = status.SUCCESS
+		code = e.SUCCESS
 		if models.ExistTagByID(id) {
 			models.DeleteTag(id)
 		} else {
-			code = status.ERROR_NOT_EXIST_TAG
+			code = e.ERROR_NOT_EXIST_TAG
 		}
 	} else {
 		for _, err := range valid.Errors {
@@ -153,7 +153,7 @@ func DeleteTag(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"code" : code,
-		"msg" : status.GetMsg(code),
+		"msg" :  e.GetMsg(code),
 		"data" : make(map[string]string),
 	})
 }

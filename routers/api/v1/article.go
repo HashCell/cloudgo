@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/Unknwon/com"
 	"github.com/astaxie/beego/validation"
-	"github.com/HashCell/golang/cloudgo/pkg/status"
+	"github.com/HashCell/golang/cloudgo/pkg/e"
 	"github.com/HashCell/golang/cloudgo/models"
 	"log"
 	"net/http"
@@ -19,14 +19,14 @@ func GetArticle(ctx *gin.Context) {
 
 	valid.Min(id, 1, "id").Message("ID must > 1")
 
-	code := status.INVALID_PARAMS
+	code := e.INVALID_PARAMS
 	var data interface{}
 	if!valid.HasErrors() {
 		if models.ExistArticleByID(id) {
 			data = models.GetArticle(id)
-			code = status.SUCCESS
+			code = e.SUCCESS
 		} else {
-			code = status.ERROR_NOT_EXIST_ARTICLE
+			code = e.ERROR_NOT_EXIST_ARTICLE
 		}
 	} else {
 		for _, err := range valid.Errors {
@@ -36,7 +36,7 @@ func GetArticle(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"code": code,
-		"msg": status.GetMsg(code),
+		"msg":  e.GetMsg(code),
 		"data": data,
 	})
 }
@@ -61,9 +61,9 @@ func GetArticles(ctx *gin.Context) {
 		valid.Min(tagId, 1, "tag_id").Message("tagId must > 1")
 	}
 
-	code := status.INVALID_PARAMS
+	code := e.INVALID_PARAMS
 	if !valid.HasErrors() {
-		code = status.SUCCESS
+		code = e.SUCCESS
 		data["lists" ] = models.GetArticles(util.GetPage(ctx), setting.PageSize, maps)
 		data["total"] = models.GetArticleTotal(maps)
 	} else {
@@ -74,7 +74,7 @@ func GetArticles(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"code": code,
-		"msg": status.GetMsg(code),
+		"msg":  e.GetMsg(code),
 		"data": data,
 	})
 }
@@ -95,7 +95,7 @@ func AddArticle(ctx *gin.Context) {
 	valid.Required(createdBy, "created_by").Message("author cannot be null")
 	valid.Range(state, 0, 1, "state").Message("state only allowed for 0 or 1")
 
-	code := status.INVALID_PARAMS
+	code := e.INVALID_PARAMS
 	if ! valid.HasErrors() {
 		if models.ExistTagByID(tagId) {
 			data := make(map[string]interface {})
@@ -107,9 +107,9 @@ func AddArticle(ctx *gin.Context) {
 			data["state"] = state
 
 			models.AddArticle(data)
-			code = status.SUCCESS
+			code = e.SUCCESS
 		} else {
-			code = status.ERROR_NOT_EXIST_TAG
+			code = e.ERROR_NOT_EXIST_TAG
 		}
 	} else {
 		for _, err := range valid.Errors {
@@ -119,7 +119,7 @@ func AddArticle(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"code" : code,
-		"msg" : status.GetMsg(code),
+		"msg" :  e.GetMsg(code),
 		"data" : make(map[string]interface{}),
 	})
 }
@@ -147,7 +147,7 @@ func EditArticle(ctx *gin.Context) {
 	valid.Required(modifiedBy, "modified_by").Message("modified_by cannot be null")
 	valid.MaxSize(modifiedBy, 100, "modified_by").Message("max length of modified_by < 100")
 
-	code := status.INVALID_PARAMS
+	code := e.INVALID_PARAMS
 	if ! valid.HasErrors() {
 		if models.ExistArticleByID(id) {
 			if models.ExistTagByID(tagId) {
@@ -168,12 +168,12 @@ func EditArticle(ctx *gin.Context) {
 				data["modified_by"] = modifiedBy
 
 				models.EditArticle(id, data)
-				code = status.SUCCESS
+				code = e.SUCCESS
 			} else {
-				code = status.ERROR_NOT_EXIST_TAG
+				code = e.ERROR_NOT_EXIST_TAG
 			}
 		} else {
-			code = status.ERROR_NOT_EXIST_ARTICLE
+			code = e.ERROR_NOT_EXIST_ARTICLE
 		}
 	} else {
 		for _, err := range valid.Errors {
@@ -183,7 +183,7 @@ func EditArticle(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"code" : code,
-		"msg" : status.GetMsg(code),
+		"msg" :  e.GetMsg(code),
 		"data" : make(map[string]string),
 	})
 }
@@ -194,13 +194,13 @@ func DeleteArticle(ctx *gin.Context) {
 	valid := validation.Validation{}
 	valid.Min(id, 1, "id").Message("ID must > 0")
 
-	code := status.INVALID_PARAMS
+	code := e.INVALID_PARAMS
 	if ! valid.HasErrors() {
 		if models.ExistArticleByID(id) {
 			models.DeleteArticle(id)
-			code = status.SUCCESS
+			code = e.SUCCESS
 		} else {
-			code = status.ERROR_NOT_EXIST_ARTICLE
+			code = e.ERROR_NOT_EXIST_ARTICLE
 		}
 	} else {
 		for _, err := range valid.Errors {
@@ -210,7 +210,7 @@ func DeleteArticle(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"code" : code,
-		"msg" : status.GetMsg(code),
+		"msg" :  e.GetMsg(code),
 		"data" : make(map[string]string),
 	})
 }

@@ -1,4 +1,4 @@
-package status
+package e
 
 const (
 	SUCCESS = 200
