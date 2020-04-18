@@ -4,6 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/HashCell/golang/cloudgo/pkg/setting"
 	"github.com/HashCell/golang/cloudgo/routers/api/v1"
+	"github.com/HashCell/golang/cloudgo/routers/api"
+	"github.com/HashCell/golang/cloudgo/middleware/jwt"
 )
 
 func testHandler(ctx *gin.Context)  {
@@ -21,9 +23,11 @@ func InitRouter() *gin.Engine {
 	gin.SetMode(setting.RunMode)	// 设置开发debug模式
 
 	// 添加路由处理器
-	//engine.GET("/test", testHandler)
+	engine.GET("/auth", api.GetAuth)
 	//返回一个RouterGroup
 	apiV1 := engine.Group("/api/v1")
+	// 对这组api都使用中间件JWT
+	apiV1.Use(jwt.JWT())
 	{
 		apiV1.GET("/tags", v1.GetTags)
 		apiV1.POST("/tags", v1.AddTag)
