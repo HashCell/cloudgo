@@ -6,8 +6,8 @@ import (
 	"github.com/HashCell/golang/cloudgo/pkg/e"
 	"github.com/HashCell/golang/cloudgo/models"
 	"github.com/HashCell/golang/cloudgo/pkg/util"
-	"log"
 	"net/http"
+	"github.com/HashCell/golang/cloudgo/pkg/logging"
 )
 
 type auth struct {
@@ -31,7 +31,7 @@ func GetAuth(ctx *gin.Context) {
 		if isExist {
 			// if exists, get token for it
 			token, err := util.GenerateToken(username, password)
-			log.Println("hhhh")
+			logging.Info("hhh")
 			if err != nil{
 				 code = e.ERROR_AUTH_TOKEN
 			} else {
@@ -45,7 +45,7 @@ func GetAuth(ctx *gin.Context) {
 	} else {
 		// params error
 		for _, err := range valid.Errors {
-			log.Println(err.Key, err.Message)
+			logging.Info(err.Key, err.Message)
 		}
 	}
 
